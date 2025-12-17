@@ -7,28 +7,6 @@ set -e
 # preset PATH
 echo "export PATH=\"$HOME/go/bin:$PATH\"" >> ~/.zshrc
 
-#
-## START: done in `Dockerfile`
-#
-
-# install dependencies
-#sudo apt update
-#sudo apt install -y bc bison build-essential ccache curl flex g++-multilib gcc-multilib git git-lfs gnupg gperf imagemagick protobuf-compiler python3-protobuf lib32readline-dev lib32z1-dev libdw-dev libelf-dev libgnutls28-dev lz4 libsdl1.2-dev libssl-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev android-platform-tools-base lib32ncurses-dev libncurses6 libncurses-dev libwxgtk3.2-dev golang
-#go install github.com/ssut/payload-dumper-go@latest
-#sudo ln -s $(which python3) /usr/local/bin/python
-#curl https://storage.googleapis.com/git-repo-downloads/repo | sudo tee /usr/local/bin/repo &> /dev/null
-#chmod a+x /usr/local/bin/repo
-
-# setup git
-#git config --global user.name "ubuntu"
-#git config --global user.email "ubuntu@android-builder.local"
-#git config --global trailer.changeid.key "Change-Id"
-git lfs install
-
-#
-## END: done in `Dockerfile`
-#
-
 # setup ccache
 export USE_CCACHE=1
 export CCACHE_EXEC=/usr/bin/ccache
@@ -62,7 +40,9 @@ repo sync -c -j 6
 
 # dump proprietary vendor binary (from latest official build)
 mkdir -p ~/tmp/vendor_dump
-payload-dumper-go -o $HOME/tmp/vendor_dump $HOME/lineage-21.0-20251006-nightly-billie-signed.zip
+cd ~/tmp
+wget https://media.githubusercontent.com/media/ParkSnoopy/billie-lineage-builder/refs/heads/main/lineage-21.0-20251006-nightly-billie-signed.zip?download=true
+payload-dumper-go -o $HOME/tmp/vendor_dump $HOME/tmp/lineage-21.0-20251006-nightly-billie-signed.zip
 cd ~/android/lineage
 cd ./device/oneplus/billie
 cp ~/tmp/vendor_dump/*.img .
