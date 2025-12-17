@@ -6,7 +6,6 @@ set -e
 
 # preset PATH
 sudo chown -R $UID:$UID $HOME
-echo "export PATH=\"$HOME/go/bin:$PATH\"" >> ~/.zshrc
 
 # setup ccache
 export USE_CCACHE=1
@@ -43,7 +42,7 @@ repo sync -c -j 8
 mkdir -p ~/tmp/vendor_dump
 cd ~/tmp
 wget https://media.githubusercontent.com/media/ParkSnoopy/billie-lineage-builder/refs/heads/main/lineage-21.0-20251006-nightly-billie-signed.zip?download=true
-payload-dumper-go -o $HOME/tmp/vendor_dump $HOME/tmp/lineage-21.0-20251006-nightly-billie-signed.zip
+$HOME/go/bin/payload-dumper-go -o $HOME/tmp/vendor_dump $HOME/tmp/lineage-21.0-20251006-nightly-billie-signed.zip
 cd ~/android/lineage
 cd ./device/oneplus/billie
 cp ~/tmp/vendor_dump/*.img .

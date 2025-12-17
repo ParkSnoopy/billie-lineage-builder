@@ -14,15 +14,17 @@ RUN \
 RUN \
 	echo 'ubuntu  ALL=(ALL:ALL) NOPASSWD: ALL' | EDITOR='tee -a' visudo	&&\
 	chown ubuntu:ubuntu /home/ubuntu/build.billie.bash			&&\
-	go install github.com/ssut/payload-dumper-go@latest			&&\
 	ln -s $(which python3) /usr/local/bin/python				&&\
 	curl https://storage.googleapis.com/git-repo-downloads/repo > /usr/local/bin/repo	&&\
-	chmod a+x /usr/local/bin/repo						&&\
-	git config --system user.name "LineageOS BuildBot"			&&\
-	git config --system user.email "LineageOSBuildBot@docker.host"		&&\
-	git config --system trailer.changeid.key "Change-Id"			&&\
-	sudo -u ubuntu git lfs install
+	chmod a+x /usr/local/bin/repo
 
 USER ubuntu
+RUN\
+	go install github.com/ssut/payload-dumper-go@latest			&&\
+	git config --global user.name "LineageOS BuildBot"			&&\
+	git config --global user.email "LineageOSBuildBot@docker.host"		&&\
+	git config --global trailer.changeid.key "Change-Id"			&&\
+	git config --global color.ui true					&&\
+	sudo -u ubuntu git lfs install
 
 CMD ["bash", "/home/ubuntu/build.billie.bash"]
