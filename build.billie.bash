@@ -5,6 +5,7 @@
 set -e
 
 # preset PATH
+sudo chown -R $UID:$UID $HOME
 echo "export PATH=\"$HOME/go/bin:$PATH\"" >> ~/.zshrc
 
 # setup ccache
@@ -16,7 +17,7 @@ ccache -M 50G
 mkdir -p ~/android/lineage
 cd ~/android/lineage
 repo init -u https://github.com/LineageOS/android.git -b lineage-21.0 --git-lfs --no-clone-bundle
-repo sync -c -j 6
+repo sync -c -j 6 --force-sync --force-checkout --force-remove-dirty --prune
 source build/envsetup.sh
 croot
 
@@ -36,7 +37,7 @@ cat << EOF > ~/android/lineage/.repo/local_manifests/billie.xml
     <project name="LineageOS/android_hardware_oneplus" path="hardware/oneplus" remote="github" revision="lineage-21" />
 </manifest>
 EOF
-repo sync -c -j 6
+repo sync -c -j 8
 
 # dump proprietary vendor binary (from latest official build)
 mkdir -p ~/tmp/vendor_dump
